@@ -32,10 +32,10 @@ This API handles user authentication, profile management, and media uploads for 
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/your-repo.git
+git clone https://github.com/bluewhale-codes/node-backend-dubbingArtist.git
 
 # Navigate into the project
-cd your-repo
+cd node-backend-dubbingArtist
 
 # Install dependencies
 npm install

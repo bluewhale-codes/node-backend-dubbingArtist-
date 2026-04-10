@@ -5,7 +5,8 @@ const ErrorHander = require("../utils/errorhandler");
 const catchAsyncError = require('../middleware/catchAsyncError');
 const uploadToCloudinary = require('../middleware/uploadToCloudinary');
 const uploadImage = require("../middleware/uploadImage");
-const cloudinary = require("../middleware/cloudinary")
+const Project = require("../model/Profile/projectModel");
+const uploadScript = require("../middleware/uploadScript");
 
 exports.registerAudio = catchAsyncError(async(req,res,next)=>{
       console.log("hello start here")
@@ -30,44 +31,6 @@ exports.registerAudio = catchAsyncError(async(req,res,next)=>{
           data:audio
      })
 })
-
-// exports.createPortfolioWork = catchAsyncError(async(req,res,next)=>{
-     
-      
-       
-      // if(!req.files.video[0]){
-      //   return next(new ErrorHander("No file uploaded",400));
-      // }
-
-      //const result = await uploadToCloudinary(req.files.video[0].buffer);
-      // const image = await  uploadImage(req.files.thumbnail[0].buffer);
-      // res.status(200).json({
-      
-      //   image:image.secure_url
-      // })
-
-      // const portfolio = await VoicePortfolio.create({
-      //       title : req.body.title,
-      //       description : req.body.description,
-      //       audioFile :result.secure_url,
-      //       duration : req.body.duration,
-      //       voiceCategory : req.body.voiceCategory,
-      //       languages : req.body.languages,
-      //       voiceStyles : req.body.voiceStyles,
-      //       clientName : req.body.clientName,
-           
-      //       rating : req.body.rating,
-      //       clientFeedback : req.body.clientFeedback,
-      //       completionDate : req.body.completionDate,
-      //       thumbnail : req.body.thumbnail
-      // })
-
-      // res.status(200).json({
-      //     message:'success',
-      //     data:portfolio
-      // })
-    
-//})
 
 
 exports.createPortfolioWork = catchAsyncError(async(req,res,next)=>{
@@ -133,4 +96,90 @@ exports.createUserProfile = catchAsyncError(async(req,res,next)=>{
        userDetail:userDetail
    })
 })
+
+
+exports.uploadScript = catchAsyncError(async(req,res,next)=>{
+ 
+   
+   
+   const script = await  uploadScript(req.files.script[0].buffer);
+   const audio  = await  uploadToCloudinary(req.files.audioFile[0].buffer);
+
+
+   // Model creation
+   const project = await Project.create({
+               user:req.user._id,
+               title:req.body.projectTitle,
+               category:req.body.category,
+               projectDescription:req.body.description,
+               industryType:req.body.industry,
+             
+               script:{
+                    public_Id:script.public_id,
+                    url:script.secure_url
+               },
+               // wordCount
+               // estimatedDuration
+               language:req.body.language,
+               accent:req.body.accent,
+               gender:req.body.gender,
+               voiceAgeRange:req.body.ageRange,
+               voiceStyleTone:req.body.voiceStyles,
+               referenceAudio:{
+                   public_Id:audio.public_id,
+                    url:audio.secure_url
+               },
+               usage:req.body.usageTypes,
+               region:req.body.region,
+
+               usageDuration:{value:req.body.duration,unit:req.body.monthyear},
+               pricingModel:req.body.pricingModel,
+               deliverySpeed:req.body.deliverySpeed,
+               deadlineDate:req.body.deadline,
+               revisions:req.body.revisions,
+               fileFormat:req.body.fileFormat,
+               audioQuality:req.body.audioQuality,
+               additionalInstructions:req.body.additionalInstructions,
+               budget:{
+                     min:req.body.minBudget,
+                     max:req.body.maxBudget
+               }
+
+  })
+   
+   res.status(200).json({
+       message:"Project Created successfully",
+       project:project
+      
+   })
+
+})
+
+exports.getAllProjects = catchAsyncError(async(req,res,next)=>{
+    
+    const projects = await Project.find();
+
+    res.status(200).json({
+      success: true,
+      count: projects.length,
+      projects: projects,
+    })
+
+
+})
+
+exports.getProjectdetails = catchAsyncError(async (req, res,next) => {
+  
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return next(new ErrorHander("No project Found with this Project",400));
+    }
+
+    res.status(200).json({
+      success: true,
+      details: project,
+    });
+  } 
+)
 

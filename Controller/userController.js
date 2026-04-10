@@ -112,3 +112,15 @@ exports.googleCallback = (req, res, next) => {
 
   })(req, res, next);
 };
+
+exports.getUser = catchAsyncError(async (req,res,next)=>{
+    const user = await User.findById(req.user._id);
+
+    if(!user){
+       return next(new ErrorHander("User not found with this ID",400));
+    }
+
+    res.status(200).json({
+        user:user
+    })
+})

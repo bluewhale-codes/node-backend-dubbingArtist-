@@ -144,7 +144,8 @@ const projectSchema = new mongoose.Schema(
     budget:{
       min:Number,
       max:Number,
-    }
+    },
+    
   },
   { timestamps: true }
 );

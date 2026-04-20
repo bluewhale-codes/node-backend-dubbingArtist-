@@ -7,7 +7,7 @@ const {validatePortfolioWork} = require("../middleware/validator/validatePortfol
 const {validateFiles} = require("../middleware/validator/validateFiles");
 const router = express.Router();
 const {isAuthenticatedUser} = require("../middleware/auth");
-const { createProposal } = require("../Controller/projectController");
+const { createProposal, getProposals, acceptProposal,createProposal} = require("../Controller/projectController");
 
 
 router.post("/upload-video",isAuthenticatedUser,upload.single("video"),registerAudio);
@@ -26,4 +26,8 @@ router.get("/get-details/:id",getProjectdetails)
 
 
 router.post("/create-proposal",isAuthenticatedUser,upload.single("demoFile"),normalizeFormData,createProposal)
+router.get("/get-proposal",isAuthenticatedUser,getProposals);
+router.post("/accept-proposal",isAuthenticatedUser,acceptProposal);
+router.post("/create-contract",isAuthenticatedUser,createProposal);
+
 module.exports = router;

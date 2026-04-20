@@ -12,8 +12,8 @@ const userSchema = new mongoose.Schema({
             default:""
     },
     url:{
-            type:String,
-            default:""
+          type:String,
+          default:""
     }
   },
 

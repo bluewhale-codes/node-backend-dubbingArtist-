@@ -7,6 +7,29 @@ const offerSchema = new mongoose.Schema(
       ref:"User",
       required:true
     },
+    sender_avatar:{
+          public_Id:{
+                type:String,
+                default:""
+        },
+        url:{
+                type:String,
+                default:""
+        }
+    },
+    title:{
+       type:String,
+       default:""
+    },
+    category:{
+        type:String,
+        default:""
+    },
+    sender_name:{
+        type:String,
+        default:""
+    },
+    
     receiver:{
       type:mongoose.Schema.ObjectId,
       ref:"User",
@@ -39,6 +62,10 @@ const offerSchema = new mongoose.Schema(
             default:""
         }
     },
+    status:{
+      type:String,
+      default:"PENDING"
+    }
   },
   { timestamps: true }
 );
